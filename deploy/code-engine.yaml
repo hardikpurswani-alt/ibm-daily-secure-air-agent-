@@ -1,0 +1,27 @@
+# AirGuard AI — IBM Cloud Code Engine Deployment Template
+# Deploy backend first, capture its HTTPS URL as PUBLIC_BACKEND_URL, then deploy frontend & sync watsonx Orchestrate.
+
+apiVersion: codeengine.cloud.ibm.com/v1beta1
+kind: Application
+metadata:
+  name: airguard-backend
+spec:
+  imageReference: icr.io/<YOUR_NAMESPACE>/airguard-backend:latest
+  scaleConcurrency: 80
+  scaleMinInstances: 1
+  scaleMaxInstances: 5
+  resources:
+    cpu: "1"
+    memory: "2G"
+  envFrom:
+    - secretRef:
+        name: airguard-backend-secrets
+  env:
+    - name: APP_ENV
+      value: production
+    - name: WATSONX_AI_URL
+      value: https://au-syd.ml.cloud.ibm.com
+    - name: WATSONX_GRANITE_MODEL_ID
+      value: ibm/granite-3-8b-instruct
+    - name: WATSONX_ORCHESTRATE_AGENT_ID
+      value: 9804aee5-5298-40dc-930c-46d17a839fde

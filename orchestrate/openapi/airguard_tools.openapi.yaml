@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  title: AirGuard AI Specialist Agent Tools
+  version: 1.0.0
+  description: >
+    OpenAPI 3.0 tools exposed by the AirGuard AI FastAPI backend for IBM watsonx
+    Orchestrate specialist collaborator agents (AQI Data, Health Advisory, Forecasting,
+    Community Action, and RAG Knowledge Lookup).
+servers:
+  - url: https://REPLACE_WITH_YOUR_IBM_CLOUD_CODE_ENGINE_URL
+    description: AirGuard AI FastAPI Backend
+paths:
+  /api/v1/tools/aqi-data:
+    get:
+      operationId: get_live_aqi_data
+      summary: Retrieve validated real-time AQI and pollutants for a city
+      description: >
+        Retrieves real-time air quality observations (CPCB India official stations,
+        NSW EPA, Open-Meteo CAMS, and optional keyed networks) including PM2.5, PM10,
+        CO, NO2, SO2, O3, NH3, Pb availability status, timestamps, source attribution,
+        meteorology, and nearby station hotspots. Never fabricates readings.
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City or region name (e.g., Delhi, Sydney, New York, London).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Validated live air quality telemetry and hotspot report
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/tools/health-advisory:
+    get:
+      operationId: generate_health_advisory
+      summary: Generate personalized non-diagnostic air quality health recommendations
+      description: >
+        Produces personalized precautions, outdoor activity adjustments, N95/FFP2 mask
+        guidance, and indoor HEPA recommendations based on current AQI, age group,
+        outdoor activity level, and optional health considerations backed by WHO/EPA/CDC RAG.
+      parameters:
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: age_group
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [child, adult, older_adult]
+            default: adult
+        - name: outdoor_activity
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [low, moderate, high, outdoor_worker]
+            default: moderate
+        - name: health_considerations
+          in: query
+          required: false
+          description: Optional comma-separated sensitivities (e.g., asthma,heart).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Personalized health advisory with RAG citations and disclaimer
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/tools/forecast:
+    get:
+      operationId: get_aqi_forecast
+      summary: Retrieve 48-72h AQI forecast with uncertainty bands and early alerts
+      description: >
+        Analyzes 48-hour history and upcoming forecast data to predict pollution
+        trends, unhealthy windows, meteorological drivers, uncertainty bounds, and
+        preventive timing recommendations.
+      parameters:
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: horizon_hours
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 48
+      responses:
+        '200':
+          description: Hourly forecast series with uncertainty bands and early warnings
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/tools/community-action:
+    get:
+      operationId: get_community_actions
+      summary: Generate community pollution-reduction campaigns and policy summaries
+      description: >
+        Identifies likely emission sources, summarizes relevant clean-air policies
+        (CPCB GRAP, US EPA, WHO), and recommends collective actions (carpooling,
+        public transit, zero waste burning, tree plantation).
+      parameters:
+        - name: city
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Community action items, policy summaries, and RAG citations
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/tools/rag-lookup:
+    get:
+      operationId: search_environmental_guidelines
+      summary: Search trusted WHO, US EPA, India CPCB/GRAP, CDC, and UNEP air quality documents
+      description: >
+        Retrieves authoritative air quality thresholds, mask/HEPA precautions, and
+        clean-air policy guidance with source URLs and excerpts.
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: top_k
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 4
+      responses:
+        '200':
+          description: Ranked knowledge excerpts with source attribution
+          content:
+            application/json:
+              schema:
+                type: object

@@ -1,0 +1,12 @@
+{
+  "existing_main_coordinator_id": "9804aee5-5298-40dc-930c-46d17a839fde",
+  "editor_url": "https://au-syd.watson-orchestrate.cloud.ibm.com/build/agent/edit/9804aee5-5298-40dc-930c-46d17a839fde",
+  "note": "Attach these 4 collaborators directly to your existing main agent in IBM watsonx Orchestrate. Do NOT create a duplicate main coordinator.",
+  "recommended_instructions": "You are the AirGuard AI Main Coordinator. Coordinate four specialist collaborator agents—AQI Data Agent, Health Advisory Agent, Forecasting Agent, and Community Action Agent—to answer daily air quality questions. For every query: (1) retrieve validated live telemetry via AQI Data Agent (never fabricate AQI numbers), (2) consult Health Advisory Agent for personalized non-diagnostic precautions when safety/activity is asked, (3) consult Forecasting Agent for upcoming trends and uncertainty bands, and (4) consult Community Action Agent for collective mitigation and policy guidance. Combine their outputs into one structured, timestamped, source-cited response.",
+  "collaborators": [
+    "airguard_aqi_data_agent",
+    "airguard_health_advisory_agent",
+    "airguard_forecasting_agent",
+    "airguard_community_action_agent"
+  ]
+}

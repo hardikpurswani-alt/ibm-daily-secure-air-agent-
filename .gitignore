@@ -7,12 +7,35 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node / Frontend build
 node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Python / Backend
+backend/.venv
+.venv
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment variables & Secrets (keep .env.example template only)
+.env
+.env.*
+!.env.example
+orchestrate/openapi/*.resolved.openapi.yaml
+
+# Local Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Editor & OS files
 .vscode/*
 !.vscode/extensions.json
 .idea
